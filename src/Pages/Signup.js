@@ -49,7 +49,7 @@ const Signup = () => {
    if(context.user?.uid)
    {
           
-          return <Redirect to='/'></Redirect>
+          return <Redirect to='/home'></Redirect>
    }
    else
    { 
@@ -85,7 +85,7 @@ const Signup = () => {
                     aria-describedby="password" 
                  />
                   </div> 
-                  <button type="text" onClick={onFormSubmit} className="btn btn-primary">Submit</button>
+                  <button type="text" onClick={onFormSubmit} className="btn btn-primary">Register</button>
                   </form>
               </div>
              

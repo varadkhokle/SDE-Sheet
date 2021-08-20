@@ -27,34 +27,37 @@ import "firebase/auth"
 //userContext
 
 import { userContext } from './Context/UserContext';
+import Footer from './Components/Footer';
+import Navbar from './Components/Navbar';
 
 firebase.initializeApp(firebaseConfig);
 
 function App() {
 
 
-  const [user,setUser] = useState({})
+  const [user,setUser] = useState(null)
   return (
     <Router>
      
       
         <ToastContainer />
     
-        <div className="container">
+        
          <userContext.Provider value={{user,setUser}}> 
+         <Navbar />
           <Switch>
-            <Route exact path="/Signin" component={Signin} />
-            <Route exact path="/Signup" component={Signup} />
-            <Route exact path="/LandingPage" component={LandingPage} />
-            <Route exact path="/" component={Home} />
+            <Route exact path="/signin" component={Signin} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/" component={LandingPage} />
+            <Route exact path="/home" component={Home} />
             <Route exact path="*" component={PageNotFound} />
           
           </Switch>
+          <Footer></Footer>
           </userContext.Provider>
-        </div>
-
-
+      
     </Router>
+    
   );
 }
 

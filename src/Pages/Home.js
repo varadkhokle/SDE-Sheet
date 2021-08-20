@@ -1,11 +1,25 @@
-import React from 'react'
-
+import React,{useContext} from 'react'
+import { userContext } from '../Context/UserContext'
+import { Redirect } from 'react-router-dom';
+import { toast } from 'react-toastify';
 const Home = () => {
-    return (
-        <div>
+
+    console.log("at home")
+   const context = useContext(userContext);
+
+   if(context.user==null)
+   {
+    //    toast("Signin First",{type:'info'})
+        return <Redirect to="/signin"></Redirect>   
+   }
+   else
+   {
+     return (
+         <div>
             SDE SHEET
-        </div>
-    )
+         </div>
+     )
+   } 
 }
 
 export default Home
