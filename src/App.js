@@ -50,8 +50,9 @@ function App() {
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/" component={LandingPage} />
             <Route exact path="/home" component={Home} />
+            <Route exact path="/home/Day-1" component={LandingPage}/>          
             <Route exact path="*" component={PageNotFound} />
-          
+            
           </Switch>
           <Footer></Footer>
           </userContext.Provider>
