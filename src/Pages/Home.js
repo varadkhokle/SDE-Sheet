@@ -13,7 +13,7 @@ const Home = () => {
   const fetchDetails = async () => {
     const { data } = await Axios.get("http://myjson.dit.upm.es/api/bins/1mpt");
     setSheetData(data);
-    console.log(data);
+   
 
   }
 

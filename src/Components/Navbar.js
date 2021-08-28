@@ -10,12 +10,9 @@ const Navbar = () => {
 
   let currpath = window.location.pathname;
   currpath = currpath.toString();
-  console.log("currpath " , currpath)   
+ 
   const context = useContext(userContext);
 
-   console.log('@@@@@@@');
-
-   console.log(context.user);
   function logout(){
       
        firebase.auth().signOut()

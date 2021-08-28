@@ -17,7 +17,7 @@ return <Redirect ></Redirect>
                    Topic:{details.Topic}
                    T_Questions:{details.Total_Questions}
                </div>
-              <Link to={"/home/Day-"+details.Day}> <div className="bg-primary">Solve</div></Link>
+              <Link to={"/home/Day-"+details.Day}> <div className="btn bg-primary">Solve</div></Link>
            </div>
         </div>
     )
