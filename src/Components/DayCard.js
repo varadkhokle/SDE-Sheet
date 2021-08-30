@@ -5,7 +5,6 @@ import { Link, Redirect } from 'react-router-dom';
 export const DayCard = ({details}) => {
 
 const goToQuestions=()=>{
-console.log(details);
 return <Redirect ></Redirect>
 }
 

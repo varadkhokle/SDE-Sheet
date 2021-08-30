@@ -29,6 +29,8 @@ import Axios from "axios"
 //userContext
 
 import { userContext } from './Context/UserContext';
+import { doneContext } from './Context/DoneContext';
+
 import Footer from './Components/Footer';
 import Navbar from './Components/Navbar';
 
@@ -40,13 +42,19 @@ if (!firebase.apps.length) {
 
 
 function App() {
+
+  var doneArr = new Array(30);
+   
+  for (var i = 0; i < 30 ; i++) {
+    doneArr[i] = [];
+}
+  
   const [sheetData, setSheetData] = useState([]);
+  const [done,setDone] = useState(doneArr) ; 
 
   const fetchDetails = async () => {
-    const { data } = await Axios.get("http://myjson.dit.upm.es/api/bins/1mpt");
+    const { data } = await Axios.get("http://myjson.dit.upm.es/api/bins/gd4");
     setSheetData(data);
-
-
   }
 
   useEffect(() => {
@@ -57,21 +65,17 @@ function App() {
   const [user, setUser] = useState(null)
   return (
     <Router>
-
-
       <ToastContainer />
-
-
       <userContext.Provider value={{ user, setUser }}>
+        <doneContext.Provider value={{done,setDone}}>
         <Navbar />
         <Switch>
           <Route exact path="/signin" component={Signin} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/" component={LandingPage} />
           <Route exact path="/home" component={Home} />
-
-          <Route exact path="/home/Day-1" children={<QuestionPage data={sheetData[0]} />} />
-          <Route exact path="/home/Day-2" children={<QuestionPage data={sheetData[1]} />} />
+          <Route exact path="/home/Day-1" children={<QuestionPage data={sheetData[0]} day = {0} />} />
+          <Route exact path="/home/Day-2" children={<QuestionPage data={sheetData[1]} day = {1} />} />
 
           {/* <Route exact path="/home/Day-3" children={<QuestionPage data={sheetData[2].QuestionsData} />} />
           <Route exact path="/home/Day-4" children={<QuestionPage data={sheetData[3].QuestionsData} />} />
@@ -110,6 +114,7 @@ function App() {
 
         </Switch>
         <Footer></Footer>
+        </doneContext.Provider>
       </userContext.Provider>
 
     </Router>

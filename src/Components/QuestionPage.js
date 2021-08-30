@@ -1,29 +1,97 @@
-import React, { useContext } from "react";
+import React, { useContext,useEffect,useState } from "react";
 import { userContext } from "../Context/UserContext";
+import { doneContext } from "../Context/DoneContext";
 import { Redirect } from "react-router-dom";
+
+//FIRBASE STUFF 
+
+//toast stuff
+
+import {toast} from "react-toastify"
+
+import firebase from 'firebase/app'
+import "firebase/database"
+
 import "../Styles/modal.css";
-const QuestionPage = ({ data }) => {
+const QuestionPage = ({ data,day }) => {
+
+
+  const [checked,setChecked] = useState(false);
+
+  let {done,setDone} = useContext(doneContext)
+  const context = useContext(userContext);
+
+  useEffect(()=>{
+    
+    const uid = context.user?.uid
+    const firedb = firebase.database().ref(`done/${uid}`);
+    //a reference with real time data base of the firebase 
+    
+     firedb.on("value",(snapshot)=>{
+     
+      
+      if(snapshot.val()!==null)
+       setDone(snapshot.val());
+      else
+       setDone(done); 
+
+     })
+
+  },[])
+
+
   function myfunc(link) {
-    console.log(link);
-
     let url = "" + link;
-
     url = url.replace(/watch/gi, "embed");
     document.getElementById("video").src = "" + url;
-    console.log(document.getElementById("video"));
-    // console.log(document.getElementById("video").src);
   }
 
   function closingfunc() {
     document.getElementById("video").src = "";
   }
 
-  const context = useContext(userContext);
+ 
+
+   
+  function donefunc(uid,index)
+  {
+   
+    setChecked(!checked);
+
+   let checkbox = document.getElementById(index);
+  
+   if(checkbox.checked===true)
+   {
+    done[day].push(index+1);
+    const str = `Day-${day+1} Question-${index+1} done!`
+    toast(str,{type:"success"});
+   }
+   else
+   {
+ 
+    toast('Marked as Not Done',{type:"warning"});
+     let temp = done[day].indexOf(index+1)
+
+      done[day].splice(temp, 1);
+   
+   }
+   
+    const firebasedb = firebase.database().ref();
+
+    firebasedb.child(`done/${uid}`).set(done,(err)=>{
+      
+    })
+
+    setDone(done);
+       
+  }
+
   if (context.user == null) {
-    //    toast("Signin First",{type:'info'})
     return <Redirect to="/signin"></Redirect>;
   } else {
-    data = data["QuestionsData"];
+     data = data["QuestionsData"];
+     console.log("spiia")
+     console.log(done[day])
     return (
       <table class="table">
         <thead>
@@ -31,23 +99,19 @@ const QuestionPage = ({ data }) => {
             <th>id</th>
             <th>First</th>
             <th>Last</th>
+            <th>Done</th>
           </tr>
         </thead>
         <tbody>
           {data.map((data, index) => (
-            <tr key={index}>
+            <tr key={index} >
               <td>{index + 1}</td>
               <td>
                 <a href={data.link} target="_blank">
                   {data.Problem}
                 </a>
               </td>
-              {/* <td>
-                <a href={data.video} target="_blank">
-               
-                  Video
-                </a>
-              </td> */}
+            
 
               <td>
                 <button
@@ -77,16 +141,22 @@ const QuestionPage = ({ data }) => {
                           aria-label="Close"
                           onClick={closingfunc}
                         >
-                          <span aria-hidden="true">&times;</span>
+                          <span id="close" aria-hidden="true">&times;</span>
+                          <span style={{color:'white'}}>close</span>
                         </button>
                       </div>
                       <div class="modal-body ">
-                        <iframe id="video" src="" allow="autoplay"></iframe>
+                        <iframe id="video" src="" allow="autoplay" allowfullscreen="allowfullscreen"></iframe>
                       </div>
                     </div>
                   </div>
                 </div>
               </td>
+              <td>
+                
+                <input type="checkbox" id={`${index}`} checked={done[day].indexOf(index+1)===-1?false:true}  onChange={()=>donefunc(context.user?.uid,index)}></input>
+              </td>
+
             </tr>
           ))}
         </tbody>
@@ -96,3 +166,5 @@ const QuestionPage = ({ data }) => {
 };
 
 export default QuestionPage;
+
+
