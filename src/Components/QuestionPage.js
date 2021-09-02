@@ -16,7 +16,7 @@ import "../Styles/modal.css";
 const QuestionPage = ({ data,day }) => {
 
 
-  const [checked,setChecked] = useState(false);
+   console.log("rerendered questionPage");
 
   let {done,setDone} = useContext(doneContext)
   const context = useContext(userContext);
@@ -29,14 +29,20 @@ const QuestionPage = ({ data,day }) => {
     
      firedb.on("value",(snapshot)=>{
      
-      
+      console.log("i am here");
+
       if(snapshot.val()!==null)
-       setDone(snapshot.val());
-      else
+      {
+        console.log("zindagi sawaar doon")
+       console.log(snapshot.val())
+        setDone(snapshot.val());
+      }
+       else
        setDone(done); 
 
      })
 
+     
   },[])
 
 
@@ -56,13 +62,14 @@ const QuestionPage = ({ data,day }) => {
   function donefunc(uid,index)
   {
    
-    setChecked(!checked);
+   
 
    let checkbox = document.getElementById(index);
   
    if(checkbox.checked===true)
    {
-    done[day].push(index+1);
+    done[day][index]=index+1;
+   
     const str = `Day-${day+1} Question-${index+1} done!`
     toast(str,{type:"success"});
    }
@@ -72,8 +79,8 @@ const QuestionPage = ({ data,day }) => {
     toast('Marked as Not Done',{type:"warning"});
      let temp = done[day].indexOf(index+1)
 
-      done[day].splice(temp, 1);
-   
+      done[day][temp] = -1;
+    
    }
    
     const firebasedb = firebase.database().ref();
@@ -82,6 +89,7 @@ const QuestionPage = ({ data,day }) => {
       
     })
 
+     
     setDone(done);
        
   }
@@ -154,7 +162,7 @@ const QuestionPage = ({ data,day }) => {
               </td>
               <td>
                 
-                <input type="checkbox" id={`${index}`} checked={done[day].indexOf(index+1)===-1?false:true}  onChange={()=>donefunc(context.user?.uid,index)}></input>
+                <input type="checkbox" id={`${index}`} checked={done[day].indexOf(index+1)==-1?false:true}  onChange={()=>donefunc(context.user?.uid,index)}></input>
               </td>
 
             </tr>

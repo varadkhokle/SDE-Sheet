@@ -46,7 +46,9 @@ function App() {
   var doneArr = new Array(30);
    
   for (var i = 0; i < 30 ; i++) {
-    doneArr[i] = [];
+    doneArr[i] = new Array(11);
+    doneArr[i].fill(-1);
+
 }
   
   const [sheetData, setSheetData] = useState([]);
